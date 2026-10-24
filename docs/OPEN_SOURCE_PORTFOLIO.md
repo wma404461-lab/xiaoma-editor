@@ -2,7 +2,7 @@
 
 Maintainer: **Artist Ma** (professional name, also known as `artist m`) · [GitHub profile](https://github.com/wma404461-lab)
 
-This portfolio covers all six public Xiaoma repositories verified on **October 24, 2026**. PonyEdit is the Unreal Engine component of a broader set of tools for scene artists and Windows creative workflows. Each project below has its own source repository, build instructions and license information.
+This portfolio covers all seven public Xiaoma repositories verified on **October 24, 2026**. PonyEdit is the Unreal Engine component of a broader set of tools for scene artists and Windows creative workflows. Each project below has its own source repository, build instructions and license information.
 
 ## Projects at a glance
 
@@ -15,7 +15,9 @@ This portfolio covers all six public Xiaoma repositories verified on **October 2
 | [Xiaoma Archive](https://github.com/wma404461-lab/xiaoma-archive) | Native Windows archive management and background context-menu operations | x64 build and 49 archive self-tests passed |
 | [Xiaoma Brightness](https://github.com/wma404461-lab/xiaoma-brightness) | Native Windows tray control for multiple displays, with hardware control and software dimming fallback | x86 build and 80,000 generated tray-logic checks passed |
 
-The counts describe local checks of the published source snapshots. They are not user counts, adoption figures, independent certification or proof of every supported workflow. The repositories are newly public: each had 0 stars and 0 forks when checked on October 24, 2026; monthly downloads are not measured. This publication batch contains source, not downloadable binary releases.
+| [Xiaoma Scene Workbench](https://github.com/wma404461-lab/xiaoma-scene-workbench) | Scene-reference board, isolated bring-your-own-key generation workspaces, local 3D previews, panorama preview and Unreal export helpers | Clean 81-file source install and 38 tests passed; actual browser model/sphere workflows checked |
+
+The counts describe local checks of the published source snapshots. They are not user counts, adoption figures, independent certification or proof of every supported workflow. The repositories are newly public; monthly downloads are not measured and no adoption figures are claimed here. This publication batch contains source, not downloadable binary releases.
 
 ## 1. Xiaoma Editor / PonyEdit
 
@@ -76,6 +78,16 @@ The counts describe local checks of the published source snapshots. They are not
 **Validation boundary:** Native UI was not launched for this publication check. Monitor/driver support varies; ARM emulation and every physical display configuration have not been verified.
 
 **Inspect:** [Validated source snapshot](https://github.com/wma404461-lab/xiaoma-brightness/tree/5a52b9d83457b411a67faf1169f2b422cf8a4b1b) · [Build guide](https://github.com/wma404461-lab/xiaoma-brightness/blob/5a52b9d83457b411a67faf1169f2b422cf8a4b1b/README.md) · [Tray test runner](https://github.com/wma404461-lab/xiaoma-brightness/blob/5a52b9d83457b411a67faf1169f2b422cf8a4b1b/scripts/test-tray-toggle.ps1)
+
+## 7. Xiaoma Scene Workbench
+
+**Purpose:** Work with scene references, separate visitor workspaces, bring-your-own-key generation jobs, reference-board annotations, local models, panorama previews and Unreal/Blender export helpers. The source combines a 2.0.106 baseline and the existing visitor-isolation changes; recovered 2.0.93 viewer modules are documented rather than presented as later production code.
+
+**Delivered work:** Published 81 English source and authored-resource files, approximately 1.49 MB before dependencies. A clean manifest-only checkout installed from the frozen lockfile and passed 38 backend/resource tests. Recovered the local viewer dependencies, fixed stale panorama callbacks and missing meshopt/Draco/KTX2 integration, and checked actual browser rendering, grid/wireframe restoration, panoramic field of view, reference-board text save/reload and local decoder cleanup. The edition includes original procedural demonstration environments and orientation axes.
+
+**Validation boundary:** Model tests use simple original static fixtures, including OBJ, FBX, GLB/embedded GLTF, meshopt, Draco and a KTX2 checker texture. They do not certify all animations or complex materials. Fourteen generated Unreal/Blender Python scripts passed syntax and structural comparison; no live editor compatibility or paid provider generation is claimed. The source includes no provider keys, private workspace data, downloaded production assets or prebuilt desktop helper.
+
+**Inspect:** [Validated source snapshot](https://github.com/wma404461-lab/xiaoma-scene-workbench/tree/034cdb92b0ae7657fe60b0c55b8c2598975ba8ec) · [Setup and validation guide](https://github.com/wma404461-lab/xiaoma-scene-workbench/blob/034cdb92b0ae7657fe60b0c55b8c2598975ba8ec/README.md) · [Server and tests](https://github.com/wma404461-lab/xiaoma-scene-workbench/tree/034cdb92b0ae7657fe60b0c55b8c2598975ba8ec/server) · [Dependency notices](https://github.com/wma404461-lab/xiaoma-scene-workbench/blob/034cdb92b0ae7657fe60b0c55b8c2598975ba8ec/THIRD_PARTY_NOTICES.md)
 
 ## Maintenance and intended Codex use
 
