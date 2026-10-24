@@ -2,6 +2,10 @@
 
 A C++ scene-production toolkit for Unreal Engine 5.6. The source includes import, naming, materials, pivot placement, surface scattering and editor panels. The plugin descriptor reports version 0.1.0. Available commands should not be mistaken for end-to-end acceptance of every workflow.
 
+## Xiaoma project portfolio
+
+PonyEdit is one of six public tools maintained by Artist Ma. See the [Xiaoma Open Source Portfolio](docs/OPEN_SOURCE_PORTFOLIO.md) for the complete project list, features, recorded build/test results, validation limits and source links. It covers PonyEdit, Asset Library, Player + Recorder, Translator, Archive and Brightness.
+
 ## Build and use
 
 Place the repository in `Plugins/PonyEdit` inside your own C++ Unreal project. Regenerate project files, build the Editor target with Visual Studio, then enable PonyEdit. Other engine versions require API compatibility checks.
