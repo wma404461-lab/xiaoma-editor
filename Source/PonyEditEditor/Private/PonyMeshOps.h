@@ -3,15 +3,15 @@
 #include "CoreMinimal.h"
 
 /**
- * 网格整理：实例级贴合 + 资产级枢轴归底。
- * M0 只做「归底」，烘焙缩放 / 碰撞重建在 M2 补。
+ * Mesh Organization: Instance-level Fit + Asset-level pivot alignment.
+ * M0 Only do「Align to base」, Bake scale / Collision rebuild at M2 Fill.
  */
 class FPonyMeshOps
 {
 public:
-	/** 把选中的 Actor 整体下移，使包围盒最低点落在 Z=0。 */
+	/** Group into bounding box Actor Move entire object down so its bounding box lowest point lands at Z=0. */
 	static int32 SnapSelectedActorsToGround(FString& OutMessage);
 
-	/** 把选中 Actor 用到的 StaticMesh 资产枢轴移到「XY 中心 + 底面」，并同步简单碰撞。 */
+	/** Move selected Actor Execute asset-level pivot origin StaticMesh Move asset pivot to「XY Center + Bottom face」, And sync simple collision. */
 	static int32 PivotMeshesToBottom(FString& OutMessage);
 };

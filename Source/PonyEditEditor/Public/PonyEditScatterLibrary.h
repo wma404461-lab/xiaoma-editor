@@ -5,10 +5,10 @@
 #include "PonyEditScatterLibrary.generated.h"
 
 /**
- * M3 种草机 v1：在选中 Actor 的包围盒范围内向下打射线，撒一片 StaticMeshActor。
+ * M3 Planting machine v1: When selected Actor cast a ray downward within the bounding box, scatter a StaticMeshActor.
  *
- * 参数走 JSON，返回 JSON；支持坡度过滤、聚簇、随机尺寸/朝向、贴地/落底、固定随机种子。
- * 这一版是「按钮撒一片」，视口拖拽笔刷和 HISM 合批在下一版。
+ * parameter walk JSON, Back JSON; supports slope filtering, clustering, random size/direction, ground adherence/bottom landing, fixed random seed.
+ * This version is「button to scatter」, viewport drag brush and HISM batching in next version.
  */
 UCLASS()
 class PONYEDITEDITOR_API UPonyEditScatterLibrary : public UBlueprintFunctionLibrary
@@ -17,19 +17,19 @@ class PONYEDITEDITOR_API UPonyEditScatterLibrary : public UBlueprintFunctionLibr
 
 public:
 	/**
-	 * 在选中表面上撒植被/道具。
-	 * 参数：meshPath, count, radius, minScale, maxScale, maxSlopeDegrees,
+	 * scatter vegetation on selected surfaces/Prop.
+	 * parameters: meshPath, count, radius, minScale, maxScale, maxSlopeDegrees,
 	 *       clusterCount, clusterRadius, surfaceOffset, randomSeed, alignToNormal,
-	 *       dropToBase；无选中时可用 center:[x,y,z] + traceHeight。
+	 *       dropToBase; available when no selection center:[x,y,z] + traceHeight.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "PonyEdit|Scatter")
 	static FString ScatterOnSelection(const FString& ParamsJson);
 
-	/** 删除当前关卡里所有 PonyScatter 标签的 Actor。 */
+	/** delete all currently in the level PonyScatter tagged Actor. */
 	UFUNCTION(BlueprintCallable, Category = "PonyEdit|Scatter")
 	static FString ClearScatter();
 
-	/** 只读统计：当前关卡有多少 PonyScatter Actor。 */
+	/** read-only statistics: how many in current level PonyScatter Actor. */
 	UFUNCTION(BlueprintCallable, Category = "PonyEdit|Scatter")
 	static FString GetScatterStats();
 };

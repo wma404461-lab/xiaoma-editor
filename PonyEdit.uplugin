@@ -2,7 +2,7 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "0.1.0",
-	"FriendlyName": "小马编辑",
+	"FriendlyName": "Xiaoma Editor",
 	"Description": "PonyEdit: level design toolkit for UE 5.6+ (import, naming, materials, pivot, scatter, terrain, road).",
 	"Category": "Editor",
 	"CreatedBy": "",

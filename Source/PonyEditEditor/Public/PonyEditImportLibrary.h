@@ -4,7 +4,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "PonyEditImportLibrary.generated.h"
 
-/** 贴图导入：按后缀套 sRGB / 法线压缩，导入后按命名规则改名。 */
+/** texture import: match by suffix sRGB / Normal compression, rename after import according to naming rules. */
 UCLASS()
 class PONYEDITEDITOR_API UPonyEditImportLibrary : public UBlueprintFunctionLibrary
 {
@@ -12,8 +12,8 @@ class PONYEDITEDITOR_API UPonyEditImportLibrary : public UBlueprintFunctionLibra
 
 public:
 	/**
-	 * 把目录下的 png/tga 导入到 DestinationPath。
-	 * 返回 {"imported":[...],"renamed":[...],"failed":[...]}
+	 * Scan directory under png/tga Import to DestinationPath.
+	 * Back {"imported":[...],"renamed":[...],"failed":[...]}
 	 */
 	UFUNCTION(BlueprintCallable, Category = "PonyEdit|Import")
 	static FString ImportTextures(const FString& SourceDir, const FString& DestinationPath);

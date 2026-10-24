@@ -60,7 +60,7 @@ namespace
 		const FString FilePath = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("PonyEdit"), TEXT("panel.png"));
 		IFileManager::Get().MakeDirectory(*FPaths::GetPath(FilePath), true);
 
-		// Slate 截图的 alpha 常为 0，PNG 会显示成全白；强制不透明。
+		// Slate Screenshot of alpha Usually appears as fully white; force opaque 0, PNG Open Xiaoma Editor Panel.
 		for (FColor& Pixel : Pixels)
 		{
 			Pixel.A = 255;
@@ -85,7 +85,7 @@ namespace
 
 	FAutoConsoleCommand GPonyOpenCommand(
 		TEXT("PonyEdit.Open"),
-		TEXT("打开小马编辑面板。"),
+		TEXT("Open Xiaoma Editor panel."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FGlobalTabmanager::Get()->TryInvokeTab(FTabId(FPonyEditEditorModule::GetTabName()));
@@ -93,7 +93,7 @@ namespace
 
 	FAutoConsoleCommand GPonySnapCommand(
 		TEXT("PonyEdit.SnapSelected"),
-		TEXT("把选中的 Actor 按包围盒归到 Z=0。"),
+		TEXT("Align selected Actor's bounding box to Z=0."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FString Message;
@@ -103,7 +103,7 @@ namespace
 
 	FAutoConsoleCommand GPonyPivotCommand(
 		TEXT("PonyEdit.PivotSelected"),
-		TEXT("对选中 Actor 用到的 StaticMesh 执行资产级枢轴归底。"),
+		TEXT("Apply pivot alignment to StaticMeshes used by selected Actor at asset level."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FString Message;
@@ -113,7 +113,7 @@ namespace
 
 	FAutoConsoleCommand GPonyInfoCommand(
 		TEXT("PonyEdit.Info"),
-		TEXT("打印小马编辑的加载状态与当前设置。"),
+		TEXT("Log Xiaoma Editor's load status and current settings."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			const UPonyEditSettings* Settings = GetDefault<UPonyEditSettings>();
@@ -126,7 +126,7 @@ namespace
 
 	FAutoConsoleCommand GPonyShotCommand(
 		TEXT("PonyEdit.Shot"),
-		TEXT("把当前小马编辑面板截成 PNG：Saved/PonyEdit/panel.png。"),
+		TEXT("Take a PNG screenshot of the current Xiaoma Editor panel: Saved/PonyEdit/panel.png."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			CapturePanelShot();
@@ -134,7 +134,7 @@ namespace
 
 	FAutoConsoleCommand GPonySelfTestCommand(
 		TEXT("PonyEdit.SelfTest"),
-		TEXT("打开面板，等待 4 秒后截图并退出，用于无头自检。"),
+		TEXT("Open the panel, wait 4 seconds, take a screenshot, then exit for headless self-check."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FGlobalTabmanager::Get()->TryInvokeTab(FTabId(FPonyEditEditorModule::GetTabName()));
@@ -148,7 +148,7 @@ namespace
 
 	FAutoConsoleCommand GPonySelfTestImportCommand(
 		TEXT("PonyEdit.SelfTestImport"),
-		TEXT("打开导入页、执行一次导入，截图后退出。"),
+		TEXT("Open the import page, perform one import, take a screenshot, then exit."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FGlobalTabmanager::Get()->TryInvokeTab(FTabId(FPonyEditEditorModule::GetTabName()));
@@ -172,7 +172,7 @@ namespace
 
 	FAutoConsoleCommand GPonySelfTestNamingCommand(
 		TEXT("PonyEdit.SelfTestNaming"),
-		TEXT("打开命名页、扫描 /Game，截图后退出。"),
+		TEXT("Open the naming page, scan /Game, take a screenshot, then exit."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FGlobalTabmanager::Get()->TryInvokeTab(FTabId(FPonyEditEditorModule::GetTabName()));
@@ -199,7 +199,7 @@ namespace
 
 	FAutoConsoleCommand GPonyMaterialRackCommand(
 		TEXT("PonyEdit.MaterialRack"),
-		TEXT("把材质架 JSON 打到日志。"),
+		TEXT("Log the material library JSON to the log."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			UE_LOG(LogPonyEdit, Display, TEXT("[PonyEdit] MaterialRack: %s"), *UPonyEditMaterialLibrary::GetRack());
@@ -207,7 +207,7 @@ namespace
 
 	FAutoConsoleCommand GPonySelfTestMaterialCommand(
 		TEXT("PonyEdit.SelfTestMaterial"),
-		TEXT("打开材质页、刷新材质架，截图后退出。"),
+		TEXT("Open the material page, refresh the material library, take a screenshot, then exit."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FGlobalTabmanager::Get()->TryInvokeTab(FTabId(FPonyEditEditorModule::GetTabName()));
@@ -234,7 +234,7 @@ namespace
 
 	FAutoConsoleCommand GPonySelfTestScatterCommand(
 		TEXT("PonyEdit.SelfTestScatter"),
-		TEXT("打开种植页，截图后退出。"),
+		TEXT("Open the scatter page, take a screenshot, then exit."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FGlobalTabmanager::Get()->TryInvokeTab(FTabId(FPonyEditEditorModule::GetTabName()));
@@ -260,7 +260,7 @@ namespace
 
 	FAutoConsoleCommand GPonySelfTestScatterSceneCommand(
 		TEXT("PonyEdit.SelfTestScatterScene"),
-		TEXT("生成测试地表并撒一片，截关卡视口后退出。"),
+		TEXT("Generate a test terrain and scatter one patch, take a level viewport screenshot, then exit."),
 		FConsoleCommandDelegate::CreateLambda([]()
 		{
 			FTSTicker::GetCoreTicker().AddTicker(FTickerDelegate::CreateLambda([](float)
@@ -344,8 +344,8 @@ void FPonyEditEditorModule::StartupModule()
 	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(
 		GetTabName(),
 		FOnSpawnTab::CreateRaw(this, &FPonyEditEditorModule::SpawnPanelTab))
-		.SetDisplayName(LOCTEXT("TabTitle", "小马编辑"))
-		.SetTooltipText(LOCTEXT("TabTooltip", "地编效率工具：导入、命名、材质、归底、种植、组合、地形、道路"))
+		.SetDisplayName(LOCTEXT("TabTitle", "Xiaoma Editor"))
+		.SetTooltipText(LOCTEXT("TabTooltip", "Main menu"))
 		.SetMenuType(ETabSpawnerMenuType::Hidden);
 
 	MenusStartupHandle = UToolMenus::RegisterStartupCallback(
@@ -388,19 +388,19 @@ void FPonyEditEditorModule::RegisterMenus()
 		return;
 	}
 
-	// 主菜单 Tools → 小马编辑（最稳的入口）
+	// Xiaoma Editor (most stable entry point Tools → Toolbar button)
 	if (UToolMenu* ToolsMenu = Menus->ExtendMenu("LevelEditor.MainMenu.Tools"))
 	{
-		FToolMenuSection& Section = ToolsMenu->FindOrAddSection("PonyEdit", LOCTEXT("PonyToolsSection", "小马编辑"));
+		FToolMenuSection& Section = ToolsMenu->FindOrAddSection("PonyEdit", LOCTEXT("PonyToolsSection", "Xiaoma Editor"));
 		Section.AddMenuEntry(
 			"PonyEdit.Open",
-			LOCTEXT("OpenPonyEdit", "小马编辑"),
-			LOCTEXT("OpenPonyEditTip", "打开小马编辑面板"),
+			LOCTEXT("OpenPonyEdit", "Xiaoma Editor"),
+			LOCTEXT("OpenPonyEditTip", "Move the selected"),
 			FSlateIcon(FAppStyle::GetAppStyleSetName(), "LevelEditor.Tabs.Details"),
 			FUIAction(FExecuteAction::CreateRaw(this, &FPonyEditEditorModule::OpenPanel)));
 	}
 
-	// 工具栏按钮：PlayToolBar 是主目标，另一个是兜底，名字不存在时不会显示。
+	// Is the primary target; the other is fallback, will not display if name does not exist: PlayToolBar Xiaoma.
 	const FName ToolbarMenus[] =
 	{
 		FName("LevelEditor.LevelEditorToolBar.PlayToolBar"),
@@ -411,14 +411,14 @@ void FPonyEditEditorModule::RegisterMenus()
 	{
 		if (UToolMenu* ToolbarMenu = Menus->ExtendMenu(MenuName))
 		{
-			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PonyEdit", LOCTEXT("PonyToolbarSection", "小马编辑"));
+			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PonyEdit", LOCTEXT("PonyToolbarSection", "Xiaoma Editor"));
 			Section.AddEntry(FToolMenuEntry::InitToolBarButton(
 				MenuName == FName("LevelEditor.LevelEditorToolBar")
 					? FName("PonyEdit.OpenButtonFallback")
 					: FName("PonyEdit.OpenButton"),
 				FUIAction(FExecuteAction::CreateRaw(this, &FPonyEditEditorModule::OpenPanel)),
-				LOCTEXT("PonyButtonLabel", "小马"),
-				LOCTEXT("PonyButtonTip", "打开小马编辑"),
+				LOCTEXT("PonyButtonLabel", "Xiaoma"),
+				LOCTEXT("PonyButtonTip", "No folder found in directory"),
 				FSlateIcon(FAppStyle::GetAppStyleSetName(), "LevelEditor.Tabs.Details")));
 		}
 	}

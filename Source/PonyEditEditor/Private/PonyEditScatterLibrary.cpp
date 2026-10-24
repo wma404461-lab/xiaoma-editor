@@ -254,7 +254,7 @@ FString UPonyEditScatterLibrary::ScatterOnSelection(const FString& ParamsJson)
 	const TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ParamsJson);
 	if (!FJsonSerializer::Deserialize(Reader, Root) || !Root.IsValid())
 	{
-		return ErrorJson(TEXT("参数不是合法 JSON"));
+		return ErrorJson(TEXT("Parameter is not valid JSON"));
 	}
 
 	FPonyScatterParams Params;
@@ -263,7 +263,7 @@ FString UPonyEditScatterLibrary::ScatterOnSelection(const FString& ParamsJson)
 	UWorld* World = GetEditorWorld();
 	if (!World)
 	{
-		return ErrorJson(TEXT("没有可用的编辑器世界"));
+		return ErrorJson(TEXT("No available editor world"));
 	}
 
 	UStaticMesh* Mesh = Cast<UStaticMesh>(LoadObject<UObject>(nullptr, *Params.MeshPath));
@@ -276,7 +276,7 @@ FString UPonyEditScatterLibrary::ScatterOnSelection(const FString& ParamsJson)
 	}
 	if (!Mesh)
 	{
-		return ErrorJson(FString::Printf(TEXT("StaticMesh 不存在：%s"), *Params.MeshPath));
+		return ErrorJson(FString::Printf(TEXT("StaticMesh does not exist: %s"), *Params.MeshPath));
 	}
 
 	FBox Bounds(ForceInit);
@@ -284,7 +284,7 @@ FString UPonyEditScatterLibrary::ScatterOnSelection(const FString& ParamsJson)
 	{
 		if (!Params.bHasCenter)
 		{
-			return ErrorJson(TEXT("先选中一个可撒点的 Actor，或在参数里给 center"));
+			return ErrorJson(TEXT("First select an actor that can be scattered, or set the center in the parameters"));
 		}
 
 		Bounds = FBox(Params.Center - FVector(0.0, 0.0, Params.TraceHeight), Params.Center + FVector(0.0, 0.0, Params.TraceHeight));
@@ -312,7 +312,7 @@ FString UPonyEditScatterLibrary::ScatterOnSelection(const FString& ParamsJson)
 	}
 
 	const FBox MeshBounds = Mesh->GetBoundingBox();
-	const FScopedTransaction Transaction(FText::FromString(TEXT("小马编辑：表面种植")));
+	const FScopedTransaction Transaction(FText::FromString(TEXT("Xiaoma Edit: Surface Scatter")));
 
 	FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(PonyScatterTrace), true);
 	TArray<FPendingScatter> Pending;
@@ -370,7 +370,7 @@ FString UPonyEditScatterLibrary::ScatterOnSelection(const FString& ParamsJson)
 		Pending.Add(PendingSpawn);
 	}
 
-	// 先采样完再统一生成，避免后撒的射线打到先撒的实例。
+	// sample first, then generate uniformly to avoid ray intersections with previously scattered instances.
 	if (Params.SpawnMode == TEXT("hism") && Pending.Num() > 0)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -447,7 +447,7 @@ FString UPonyEditScatterLibrary::ScatterOnSelection(const FString& ParamsJson)
 	Result.bOk = Result.Placed > 0;
 	if (!Result.bOk)
 	{
-		Result.Error = TEXT("没有放置任何实例（全部未命中或坡度超限）");
+		Result.Error = TEXT("No instances placed (all missed or slope exceeded)");
 	}
 	Result.ElapsedMs = (FPlatformTime::Seconds() - StartSeconds) * 1000.0;
 
@@ -459,7 +459,7 @@ FString UPonyEditScatterLibrary::ClearScatter()
 	UWorld* World = GetEditorWorld();
 	if (!World)
 	{
-		return ErrorJson(TEXT("没有可用的编辑器世界"));
+		return ErrorJson(TEXT("No available editor world"));
 	}
 
 	TArray<AActor*> ToDestroy;
@@ -472,7 +472,7 @@ FString UPonyEditScatterLibrary::ClearScatter()
 		}
 	}
 
-	const FScopedTransaction Transaction(FText::FromString(TEXT("小马编辑：清空种植")));
+	const FScopedTransaction Transaction(FText::FromString(TEXT("Xiaoma Edit: Clear Scatter")));
 	int32 Removed = 0;
 	for (AActor* Actor : ToDestroy)
 	{
@@ -495,7 +495,7 @@ FString UPonyEditScatterLibrary::GetScatterStats()
 	UWorld* World = GetEditorWorld();
 	if (!World)
 	{
-		return ErrorJson(TEXT("没有可用的编辑器世界"));
+		return ErrorJson(TEXT("No available editor world"));
 	}
 
 	int32 ActorCount = 0;

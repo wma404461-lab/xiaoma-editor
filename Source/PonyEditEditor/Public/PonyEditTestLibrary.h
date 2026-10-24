@@ -7,22 +7,22 @@
 class UStaticMesh;
 class UMaterialInterface;
 
-/** 给自动化脚本/验收用的只读探针，不参与编辑器逻辑。 */
+/** for automation scripts/verification-only probes, not involved in editor logic. */
 UCLASS()
 class PONYEDITEDITOR_API UPonyEditTestLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 public:
-	/** 直接读源网格（所有 LOD 的顶点）的包围盒，绕过可能延迟的渲染包围盒。 */
+	/** directly read source mesh (all LOD vertex) bounding box, bypassing potentially delayed render bounding box. */
 	UFUNCTION(BlueprintCallable, Category = "PonyEdit|Test")
 	static FBox GetMeshSourceBounds(UStaticMesh* Mesh);
 
-	/** 只读贴图设置，避免 Python 反射猜属性名。格式：srgb=0;compression=1;lodgroup=0 */
+	/** read-only texture settings, avoid Python reflection guess property name. Format: srgb=0;compression=1;lodgroup=0 */
 	UFUNCTION(BlueprintCallable, Category = "PonyEdit|Test")
 	static FString GetTextureSettings(class UTexture2D* Texture);
 
-	/** 材质编译状态：exists=1;compilingOrError=0;hasResource=1 */
+	/** material compile status: exists=1;compilingOrError=0;hasResource=1 */
 	UFUNCTION(BlueprintCallable, Category = "PonyEdit|Test")
 	static FString GetMaterialCompileStatus(UMaterialInterface* Material);
 };

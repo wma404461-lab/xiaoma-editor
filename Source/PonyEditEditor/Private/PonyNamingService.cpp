@@ -17,7 +17,7 @@ namespace
 	bool IsJunkToken(const FString& Token)
 	{
 		const FString Lower = Token.ToLower();
-		static const TCHAR* Junk[] = { TEXT("final"), TEXT("copy"), TEXT("new"), TEXT("temp"), TEXT("last"), TEXT("ok"), TEXT("副本"), TEXT("最终") };
+		static const TCHAR* Junk[] = { TEXT("final"), TEXT("copy"), TEXT("new"), TEXT("temp"), TEXT("last"), TEXT("ok"), TEXT("Copy"), TEXT("Final") };
 		for (const TCHAR* Word : Junk)
 		{
 			if (Lower == Word)
@@ -25,7 +25,7 @@ namespace
 				return true;
 			}
 		}
-		// v2 / V03 这类版本号
+		// v2 / V03 This version number type
 		if (Lower.Len() >= 2 && Lower[0] == 'v' && Lower.RightChop(1).IsNumeric())
 		{
 			return true;
@@ -86,19 +86,19 @@ FString FPonyNamingService::SuggestName(const FString& CurrentName, const FStrin
 
 	if (CurrentName.Contains(TEXT(" ")) || CurrentName.Contains(TEXT("-")) || CurrentName.Contains(TEXT(".")))
 	{
-		OutReason = TEXT("含空格 / 连字符 / 点");
+		OutReason = TEXT("Contains spaces / hyphens / dots");
 	}
 	else if (bNonAscii)
 	{
-		OutReason = TEXT("含中文或全角字符");
+		OutReason = TEXT("Contains Chinese or full-width characters");
 	}
 	else if (!CurrentName.StartsWith(Prefix))
 	{
-		OutReason = FString::Printf(TEXT("缺少 %s 前缀"), *Prefix);
+		OutReason = FString::Printf(TEXT("Missing %s prefix"), *Prefix);
 	}
 	else if (CurrentName.Contains(TEXT("(")) || CurrentName.Contains(TEXT(")")))
 	{
-		OutReason = TEXT("含 (1) 这类副本后缀");
+		OutReason = TEXT("Contains suffixes like (1)");
 	}
 
 	FString Core = CurrentName;
@@ -130,7 +130,7 @@ FString FPonyNamingService::SuggestName(const FString& CurrentName, const FStrin
 	}
 	if (bDroppedJunk && OutReason.IsEmpty())
 	{
-		OutReason = TEXT("含 _final/_copy/版本号 残留");
+		OutReason = TEXT("Contains residual _final/_copy/version tags");
 	}
 
 	FString Index;
@@ -139,7 +139,7 @@ FString FPonyNamingService::SuggestName(const FString& CurrentName, const FStrin
 		Index = Kept.Pop();
 		if (Index.Len() < 2 && OutReason.IsEmpty())
 		{
-			OutReason = TEXT("序号未补零");
+			OutReason = TEXT("Sequence number not zero-padded");
 		}
 	}
 
@@ -199,8 +199,8 @@ void FPonyNamingService::ScanAssets(const TArray<FAssetData>& Assets, TArray<FPo
 			Issue.Asset = Asset;
 			Issue.CurrentName = Asset.AssetName.ToString();
 			Issue.SuggestedName = Suggested;
-			Issue.Reason = Reason.IsEmpty() ? TEXT("命名不符合规范") : Reason;
-			Issue.Severity = Reason.Contains(TEXT("前缀")) || Reason.Contains(TEXT("中文")) || Reason.Contains(TEXT("空格")) ? 2 : 1;
+			Issue.Reason = Reason.IsEmpty() ? TEXT("Name does not conform to standards") : Reason;
+			Issue.Severity = Reason.Contains(TEXT("Prefix")) || Reason.Contains(TEXT("Chinese")) || Reason.Contains(TEXT("Space")) ? 2 : 1;
 			OutIssues.Add(Issue);
 		}
 	}
@@ -259,7 +259,7 @@ int32 FPonyNamingService::FixSelectedActorLabels(TArray<FString>& OutRenamed)
 			continue;
 		}
 
-		// 已经是 ENV_ 开头就当作处理过，避免每点一次序号往后跳。
+		// Already ENV_ Treat as already processed at start to avoid incrementing sequence number on each click.
 		if (Actor->GetActorLabel().StartsWith(TEXT("ENV_")))
 		{
 			continue;

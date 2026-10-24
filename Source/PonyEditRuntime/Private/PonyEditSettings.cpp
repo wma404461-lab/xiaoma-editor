@@ -3,5 +3,5 @@
 UPonyEditSettings::UPonyEditSettings()
 {
 	CategoryName = TEXT("Plugins");
-	SectionName = TEXT("小马编辑");
+	SectionName = TEXT("Xiaoma Editor");
 }

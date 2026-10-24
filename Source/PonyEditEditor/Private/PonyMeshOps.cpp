@@ -64,11 +64,11 @@ int32 FPonyMeshOps::SnapSelectedActorsToGround(FString& OutMessage)
 
 	if (Actors.Num() == 0)
 	{
-		OutMessage = TEXT("先选中 Actor，再点归底");
+		OutMessage = TEXT("Select an actor, then click Align to Ground");
 		return 0;
 	}
 
-	const FScopedTransaction Transaction(NSLOCTEXT("PonyEdit", "SnapToGround", "小马编辑：实例归底"));
+	const FScopedTransaction Transaction(NSLOCTEXT("PonyEdit", "SnapToGround", "Xiaoma Editor: Instance Align to Ground"));
 	int32 MovedCount = 0;
 
 	for (AActor* Actor : Actors)
@@ -106,7 +106,7 @@ int32 FPonyMeshOps::SnapSelectedActorsToGround(FString& OutMessage)
 		++MovedCount;
 	}
 
-	OutMessage = FString::Printf(TEXT("实例归底：%d / %d 个 Actor 已落到 Z=0"), MovedCount, Actors.Num());
+	OutMessage = FString::Printf(TEXT("Instances aligned to ground: %d / %d actors landed at Z=0"), MovedCount, Actors.Num());
 	return MovedCount;
 }
 
@@ -117,11 +117,11 @@ int32 FPonyMeshOps::PivotMeshesToBottom(FString& OutMessage)
 
 	if (Meshes.Num() == 0)
 	{
-		OutMessage = TEXT("选中的 Actor 上没有 StaticMesh");
+		OutMessage = TEXT("No StaticMesh selected on the chosen actor");
 		return 0;
 	}
 
-	const FScopedTransaction Transaction(NSLOCTEXT("PonyEdit", "PivotToBottom", "小马编辑：枢轴归底"));
+	const FScopedTransaction Transaction(NSLOCTEXT("PonyEdit", "PivotToBottom", "Xiaoma Editor: Pivot Align to Ground"));
 	int32 ChangedCount = 0;
 	int32 SkippedCount = 0;
 
@@ -135,7 +135,7 @@ int32 FPonyMeshOps::PivotMeshesToBottom(FString& OutMessage)
 
 		Mesh->Modify();
 
-		// 先算所有有效 LOD 的合并包围盒。
+		// calculate all valid ones first LOD of the merged bounding box.
 		FBox Bounds(ForceInit);
 		const int32 NumLODs = Mesh->GetNumLODs();
 		for (int32 LODIndex = 0; LODIndex < NumLODs; ++LODIndex)
@@ -194,7 +194,7 @@ int32 FPonyMeshOps::PivotMeshesToBottom(FString& OutMessage)
 			Mesh->CommitMeshDescription(LODIndex);
 		}
 
-		// 简单碰撞跟着平移；凸包一并移，再重建物理。
+		// simple collision follows translation; convex hull moves together, then physics rebuilt.
 		if (UBodySetup* BodySetup = Mesh->GetBodySetup())
 		{
 			for (FKBoxElem& Element : BodySetup->AggGeom.BoxElems)
@@ -226,7 +226,7 @@ int32 FPonyMeshOps::PivotMeshesToBottom(FString& OutMessage)
 		Mesh->MarkPackageDirty();
 		++ChangedCount;
 
-		// 自检用：读源网格的 minZ，确认顶点真的动了（渲染包围盒可能延迟刷新）。
+		// self-check: reading source mesh’s minZ, confirm vertices actually moved (render bounding box may have delayed refresh)).
 		float SourceMinZ = TNumericLimits<float>::Max();
 		if (const FMeshDescription* CheckDesc = Mesh->GetMeshDescription(0))
 		{
@@ -242,6 +242,6 @@ int32 FPonyMeshOps::PivotMeshesToBottom(FString& OutMessage)
 			*Bounds.ToString(), *Mesh->GetBoundingBox().ToString(), SourceMinZ);
 	}
 
-	OutMessage = FString::Printf(TEXT("资产枢轴归底：%d 个网格已处理，%d 个跳过（无可用网格描述）"), ChangedCount, SkippedCount);
+	OutMessage = FString::Printf(TEXT("Asset pivot aligned to ground: %d meshes processed, %d skipped (no available mesh description)"), ChangedCount, SkippedCount);
 	return ChangedCount;
 }

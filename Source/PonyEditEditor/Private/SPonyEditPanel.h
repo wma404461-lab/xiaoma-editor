@@ -11,7 +11,7 @@ class SVerticalBox;
 class SEditableTextBox;
 class SCheckBox;
 
-/** 材质架的一行，来自 PonyEditMaterialLibrary.GetRack()。 */
+/** one row of material rack, from PonyEditMaterialLibrary.GetRack(). */
 struct FPonyMaterialRackEntry
 {
 	FString Name;
@@ -26,8 +26,8 @@ struct FPonyMaterialRackEntry
 };
 
 /**
- * 小马编辑主面板（M3）：
- * 左侧 8 个模块，已接「导入」「命名」「材质」「整理」「种植」。
+ * Xiaoma main editing panel (M3): 
+ * left side 8 modules, already connected「Import」「Naming」「Material」「Organize」「Scatter」.
  */
 class SPonyEditPanel : public SCompoundWidget
 {

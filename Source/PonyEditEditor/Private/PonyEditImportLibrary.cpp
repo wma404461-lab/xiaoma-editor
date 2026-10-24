@@ -65,7 +65,7 @@ FString UPonyEditImportLibrary::ImportTextures(const FString& SourceDir, const F
 	if (Files.Num() == 0)
 	{
 		const TSharedRef<FJsonObject> Root = MakeShared<FJsonObject>();
-		Root->SetStringField(TEXT("error"), TEXT("目录里没有 png/tga"));
+		Root->SetStringField(TEXT("error"), TEXT("No png/tga files in the directory"));
 		return WriteJson(Root);
 	}
 
@@ -115,12 +115,12 @@ FString UPonyEditImportLibrary::ImportTextures(const FString& SourceDir, const F
 			Texture->PostEditChange();
 			Imported.Add(Texture->GetPathName());
 
-			// 命名规则：T_ + PascalCase，保留 _N/_D/_R 通道后缀。
+			// Keep: T_ + PascalCase, Channel suffix _N/_D/_R channel suffix.
 			FString Reason;
 			const FString Suggested = FPonyNamingService::SuggestName(Texture->GetName(), TEXT("Texture2D"), Reason);
 			if (!Suggested.IsEmpty() && Suggested != Texture->GetName())
 			{
-				// 覆盖语义：目标名已存在就先删旧的，避免改名撞名。
+				// Semantic coverage: If the target name already exists, delete the old one to avoid naming conflicts on renaming.
 				FAssetRegistryModule& RegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
 				const FSoftObjectPath TargetPath(FString::Printf(TEXT("%s.%s"), *DestinationPath, *Suggested));
 				const FAssetData Existing = RegistryModule.Get().GetAssetByObjectPath(TargetPath);

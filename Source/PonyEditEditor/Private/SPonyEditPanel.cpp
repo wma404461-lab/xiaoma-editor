@@ -62,38 +62,38 @@ namespace
 
 	const TCHAR* GModuleNames[8] =
 	{
-		TEXT("导入"),
-		TEXT("命名"),
-		TEXT("材质"),
-		TEXT("整理"),
-		TEXT("种植"),
-		TEXT("组合"),
-		TEXT("地形"),
-		TEXT("道路")
+		TEXT("Import"),
+		TEXT("Name"),
+		TEXT("Material"),
+		TEXT("Organize"),
+		TEXT("Scatter"),
+		TEXT("Combine"),
+		TEXT("Terrain"),
+		TEXT("Road")
 	};
 
 	const TCHAR* GModuleTitles[8] =
 	{
-		TEXT("快车道 · 资产导入"),
-		TEXT("命名警察 · 资产与 Actor 命名"),
-		TEXT("材质架 · 标准母材质"),
-		TEXT("整理台 · 枢轴归底"),
-		TEXT("种草机 · 表面种植"),
-		TEXT("搭配师 · 装饰组合"),
-		TEXT("地形笔 · 画线起伏"),
-		TEXT("铺路工 · 画线成路")
+		TEXT("Asset Import"),
+		TEXT("Asset and Actor Naming"),
+		TEXT("Material Library"),
+		TEXT("Pivot and Ground Alignment"),
+		TEXT("Surface Scatter"),
+		TEXT("Prop Assemblies"),
+		TEXT("Terrain Shaping"),
+		TEXT("Road Creation")
 	};
 
 	const TCHAR* GModuleNotes[8] =
 	{
-		TEXT("拖入 FBX / 贴图，按规则命名、归档、配材质、开碰撞。M1 接。"),
-		TEXT("资产与 Actor 标签体检、批量改名、引用保护、回滚。M1 接。"),
-		TEXT("8 个标准母材质 + 参数契约 + MI 生成已接；缩略图、变体、迁移器下一版。"),
-		TEXT("实例归底和资产级枢轴归底已经可用；烘焙缩放、碰撞重建待补。"),
-		TEXT("在选中表面撒植被/道具：坡度、聚簇、随机尺寸/朝向、落底。M3 v1；视口笔刷下一版。"),
-		TEXT("主件 + 子件成套摆放，随机尺寸、旋转、相对位置。M3 接。"),
-		TEXT("画线 + 剖面直接写 Landscape 高度图。M4 接。"),
-		TEXT("画线生成地形整形、路面、材质与路边附属。M4 接。")
+		TEXT("Drag in FBX / Texture, name according to rules, archive, assign material, enable collision. M1 connected."),
+		TEXT("Asset and Actor Tag Inspection, batch renaming, reference protection, rollback. M1 connected."),
+		TEXT("8 standard parent materials + parameter contract + MI generation connected; thumbnail, variants, migrator to next version."),
+		TEXT("Instance pivot and asset-level pivot alignment are available; baked scaling, collision reconstruction pending."),
+		TEXT("Scatter vegetation/props on selected surface: slope, clustering, random size/rotation, align to ground. M3 v1; viewport brush next version."),
+		TEXT("Main item + sub-item set placement, random size, rotation, relative position. M3 connected."),
+		TEXT("Draw line + cross-section directly writes landscape height map. M4 connected."),
+		TEXT("Draw line to generate terrain shaping, road, materials, and roadside features. M4 connected.")
 	};
 }
 
@@ -121,7 +121,7 @@ void SPonyEditPanel::Construct(const FArguments& InArgs)
 					.Padding(FMargin(6.f, 2.f))
 					[
 						SNew(STextBlock)
-						.Text(FText::FromString(TEXT("马")))
+						.Text(FText::FromString(TEXT("P")))
 						.Font(FAppStyle::GetFontStyle("HeadingSmall"))
 						.ColorAndOpacity(FSlateColor(FLinearColor(0.55f, 0.72f, 1.0f)))
 					]
@@ -132,7 +132,7 @@ void SPonyEditPanel::Construct(const FArguments& InArgs)
 				.Padding(FMargin(8.f, 0.f, 0.f, 0.f))
 				[
 					SNew(STextBlock)
-					.Text(FText::FromString(TEXT("小马编辑")))
+					.Text(FText::FromString(TEXT("Xiaoma Editor")))
 					.Font(FAppStyle::GetFontStyle("HeadingSmall"))
 				]
 				+ SHorizontalBox::Slot()
@@ -188,7 +188,7 @@ void SPonyEditPanel::Construct(const FArguments& InArgs)
 				.Padding(FMargin(10.f, 5.f))
 				[
 					SAssignNew(StatusText, STextBlock)
-					.Text(FText::FromString(TEXT("就绪。选中 Actor 后可以归底。")))
+					.Text(FText::FromString(TEXT("Ready. After selecting an actor, it can be aligned to ground.")))
 					.ColorAndOpacity(FSlateColor(FLinearColor(0.55f, 0.60f, 0.66f)))
 					.AutoWrapText(true)
 				]
@@ -304,7 +304,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeModulePage(int32 ModuleIndex)
 			.Padding(FMargin(0.f, 2.f, 0.f, 8.f))
 			[
 				SNew(STextBlock)
-				.Text(FText::FromString(TEXT("选中 Actor 后，按包围盒把底面对到 Z=0；或把用到的网格资产枢轴永久挪到底面中心。")))
+				.Text(FText::FromString(TEXT("After selecting an actor, align the base face to Z=0 using the bounding box; or permanently move the pivot of used mesh assets to the center of the ground plane.")))
 				.ColorAndOpacity(FSlateColor(FLinearColor(0.62f, 0.66f, 0.70f)))
 				.AutoWrapText(true)
 			]
@@ -318,7 +318,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeModulePage(int32 ModuleIndex)
 				.OnClicked(this, &SPonyEditPanel::OnSnapToGround)
 				[
 					SNew(STextBlock)
-					.Text(FText::FromString(TEXT("实例归底（只挪 Actor）")))
+					.Text(FText::FromString(TEXT("Instance align to ground (only moves actor)")))
 				]
 			]
 			+ SVerticalBox::Slot()
@@ -331,7 +331,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeModulePage(int32 ModuleIndex)
 				.OnClicked(this, &SPonyEditPanel::OnPivotToBottom)
 				[
 					SNew(STextBlock)
-					.Text(FText::FromString(TEXT("资产枢轴归底（改网格 + 简单碰撞）")))
+					.Text(FText::FromString(TEXT("Asset pivot align to ground (modifies mesh + simple collision)")))
 				]
 			]
 			+ SVerticalBox::Slot()
@@ -339,7 +339,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeModulePage(int32 ModuleIndex)
 			.Padding(FMargin(0.f, 10.f, 0.f, 0.f))
 			[
 				SNew(STextBlock)
-				.Text(FText::FromString(TEXT("资产级会改所有引用；只想修当前这一个就用「实例归底」。两种操作都进一个撤销事务。")))
+				.Text(FText::FromString(TEXT("Asset-level changes affect all references; if you only want to fix this one, use 'Instance Align to Ground'. Both operations are grouped into a single undo transaction.")))
 				.ColorAndOpacity(FSlateColor(FLinearColor(0.50f, 0.55f, 0.60f)))
 				.AutoWrapText(true)
 			];
@@ -359,7 +359,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeModulePage(int32 ModuleIndex)
 		.AutoHeight()
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("位置已留好，按路线图接进来。")))
+			.Text(FText::FromString(TEXT("Position is already set, connect according to the route map.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.48f, 0.52f, 0.57f)))
 		];
 }
@@ -382,7 +382,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeImportPage()
 		.Padding(FMargin(0.f, 2.f, 0.f, 8.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("从 TestInput/textures 导入 png：自动加 T_ 前缀、按 _N/_R 设法线/线性、导入后立即保存。拖拽和监听在 M2 接。")))
+			.Text(FText::FromString(TEXT("Import png from TestInput/textures: automatically adds T_ prefix, sets normals/linear according to _N/_R, saves immediately after import. Drag and listen functionality connected to M2.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.62f, 0.66f, 0.70f)))
 			.AutoWrapText(true)
 		]
@@ -394,7 +394,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeImportPage()
 			.ContentPadding(FMargin(12.f, 8.f))
 			.OnClicked(this, &SPonyEditPanel::OnImportTextures)
 			[
-				SNew(STextBlock).Text(FText::FromString(TEXT("导入 TestInput/textures")))
+				SNew(STextBlock).Text(FText::FromString(TEXT("Import TestInput/textures")))
 			]
 		]
 		+ SVerticalBox::Slot()
@@ -402,7 +402,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeImportPage()
 		.Padding(FMargin(0.f, 10.f, 0.f, 0.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("目标：/Game/PonyEditTest/Textures")))
+			.Text(FText::FromString(TEXT("Target: /Game/PonyEditTest/Textures")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.45f, 0.49f, 0.53f)))
 		];
 }
@@ -427,7 +427,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeMaterialPage()
 		.Padding(FMargin(0.f, 2.f, 0.f, 8.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("8 个标准母材质，共用一套参数契约。选一个母材质，用选中 Actor 的网格名建 MI 并直接套上；母材质本身也可直接套。")))
+			.Text(FText::FromString(TEXT("8 standard parent materials, sharing a common parameter contract. Select a parent material, create a MI using the mesh name of the selected actor and apply it directly; the parent material itself can also be applied directly.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.62f, 0.66f, 0.70f)))
 			.AutoWrapText(true)
 		]
@@ -444,7 +444,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeMaterialPage()
 				.ContentPadding(FMargin(10.f, 6.f))
 				.OnClicked(this, &SPonyEditPanel::OnRefreshMaterials)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("刷新材质架")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Refresh material library")))
 				]
 			]
 			+ SHorizontalBox::Slot()
@@ -456,7 +456,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeMaterialPage()
 				.ContentPadding(FMargin(10.f, 6.f))
 				.OnClicked(this, &SPonyEditPanel::OnCreateMaterialInstance)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("建 MI 并应用到选中")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Create MI and apply to selected")))
 				]
 			]
 		]
@@ -469,7 +469,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeMaterialPage()
 			.ContentPadding(FMargin(10.f, 6.f))
 			.OnClicked(this, &SPonyEditPanel::OnApplyMasterMaterial)
 			[
-				SNew(STextBlock).Text(FText::FromString(TEXT("母材质直接套到选中")))
+				SNew(STextBlock).Text(FText::FromString(TEXT("Parent material directly applied to selected")))
 			]
 		]
 		+ SVerticalBox::Slot()
@@ -487,7 +487,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeMaterialPage()
 		.Padding(FMargin(0.f, 8.f, 0.f, 0.f))
 		[
 			SAssignNew(MaterialDetailText, STextBlock)
-			.Text(FText::FromString(TEXT("点「刷新材质架」查看 8 个母材质；点一行选中。")))
+			.Text(FText::FromString(TEXT("Click 'Refresh Material Library' to view the 8 parent materials; click a row to select it.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.50f, 0.55f, 0.60f)))
 			.AutoWrapText(true)
 		];
@@ -516,7 +516,7 @@ FReply SPonyEditPanel::OnRefreshMaterials()
 	if (StatusText.IsValid() && MaterialRack.Num() > 0)
 	{
 		StatusText->SetText(FText::FromString(FString::Printf(
-			TEXT("材质架：%d/%d 个母材质契约完整（%d 个存在），共 %d 个 MI"),
+			TEXT("Material Asset: %d/%d parent material contracts complete (%d exist), total %d MI"),
 			Healthy, MaterialRack.Num(), Existing, Instances)));
 	}
 	return FReply::Handled();
@@ -532,7 +532,7 @@ FReply SPonyEditPanel::OnSelectMaterialMaster(int32 Index)
 		if (StatusText.IsValid())
 		{
 			StatusText->SetText(FText::FromString(FString::Printf(
-				TEXT("已选中 %s；可以建 MI 或直接套到选中 Actor。"), *MaterialRack[Index].Name)));
+				TEXT("Selected %s; can create MI or directly apply to selected Actor."), *MaterialRack[Index].Name)));
 		}
 	}
 	return FReply::Handled();
@@ -545,7 +545,7 @@ FReply SPonyEditPanel::OnCreateMaterialInstance()
 	{
 		if (StatusText.IsValid())
 		{
-			StatusText->SetText(FText::FromString(TEXT("先在材质架里选一个母材质。")));
+			StatusText->SetText(FText::FromString(TEXT("First select a parent material in the material asset browser.")));
 		}
 		return FReply::Handled();
 	}
@@ -563,7 +563,7 @@ FReply SPonyEditPanel::OnCreateMaterialInstance()
 		if (bOk)
 		{
 			StatusText->SetText(FText::FromString(FString::Printf(
-				TEXT("已创建 %s，并套到 %d 个槽位。"),
+				TEXT("Created %s and applied to %d slots."),
 				*GetJsonString(Root, TEXT("assetName")),
 				GetJsonInt(Root, TEXT("appliedSlots")))));
 		}
@@ -571,8 +571,8 @@ FReply SPonyEditPanel::OnCreateMaterialInstance()
 		{
 			const FString Error = bParsed
 				? GetJsonString(Root, TEXT("error"))
-				: TEXT("返回结果不是合法 JSON");
-			StatusText->SetText(FText::FromString(TEXT("建 MI 失败：") + Error));
+				: TEXT("Return result is not valid JSON");
+			StatusText->SetText(FText::FromString(TEXT("Failed to create MI:") + Error));
 		}
 	}
 
@@ -590,7 +590,7 @@ FReply SPonyEditPanel::OnApplyMasterMaterial()
 	{
 		if (StatusText.IsValid())
 		{
-			StatusText->SetText(FText::FromString(TEXT("先在材质架里选一个母材质。")));
+			StatusText->SetText(FText::FromString(TEXT("First select a parent material in the material asset browser.")));
 		}
 		return FReply::Handled();
 	}
@@ -607,7 +607,7 @@ FReply SPonyEditPanel::OnApplyMasterMaterial()
 		if (bOk)
 		{
 			StatusText->SetText(FText::FromString(FString::Printf(
-				TEXT("已套到 %d 个 Actor、%d 个槽位。"),
+				TEXT("Applied to %d Actors, %d slots."),
 				GetJsonInt(Root, TEXT("actors")),
 				GetJsonInt(Root, TEXT("slots")))));
 		}
@@ -615,8 +615,8 @@ FReply SPonyEditPanel::OnApplyMasterMaterial()
 		{
 			const FString Error = bParsed
 				? GetJsonString(Root, TEXT("error"))
-				: TEXT("返回结果不是合法 JSON");
-			StatusText->SetText(FText::FromString(TEXT("套材质失败：") + Error));
+				: TEXT("Return result is not valid JSON");
+			StatusText->SetText(FText::FromString(TEXT("Failed to apply material:") + Error));
 		}
 	}
 	return FReply::Handled();
@@ -649,7 +649,7 @@ void SPonyEditPanel::RebuildMaterialRack()
 		.Padding(FMargin(0.f, 4.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("材质架数据解析失败。")))
+			.Text(FText::FromString(TEXT("Failed to parse material asset data.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.95f, 0.55f, 0.50f)))
 		];
 		return;
@@ -687,7 +687,7 @@ void SPonyEditPanel::RebuildMaterialRack()
 		.Padding(FMargin(0.f, 4.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("没有读到母材质。先运行 Scripts/make_masters.py 生成 8 个母材质。")))
+			.Text(FText::FromString(TEXT("No parent materials found. Run Scripts/make_masters.py to generate 8 parent materials.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.95f, 0.70f, 0.45f)))
 			.AutoWrapText(true)
 		];
@@ -703,15 +703,15 @@ void SPonyEditPanel::RebuildMaterialRack()
 			? FLinearColor(0.45f, 0.78f, 0.52f)
 			: (Entry.bExists ? FLinearColor(0.95f, 0.55f, 0.50f) : FLinearColor(0.52f, 0.55f, 0.58f));
 
-		FString Detail = FString::Printf(TEXT("%d/%d 参数 · %d 个 MI"),
+		FString Detail = FString::Printf(TEXT("%d/%d parameters · %d MI"),
 			Entry.ParamCount, Entry.ExpectedCount, Entry.MICount);
 		if (Entry.Missing.Num() > 0)
 		{
-			Detail += TEXT(" · 缺 ") + FString::Join(Entry.Missing, TEXT(", "));
+			Detail += TEXT(" · Missing ") + FString::Join(Entry.Missing, TEXT(", "));
 		}
 		else if (!Entry.bExists)
 		{
-			Detail += TEXT(" · 资产不存在");
+			Detail += TEXT(" · Asset does not exist");
 		}
 
 		MaterialRackBox->AddSlot()
@@ -779,25 +779,25 @@ void SPonyEditPanel::UpdateMaterialDetail()
 
 	if (!MaterialRack.IsValidIndex(SelectedMaterialIndex))
 	{
-		MaterialDetailText->SetText(FText::FromString(TEXT("点「刷新材质架」查看 8 个母材质；点一行选中。")));
+		MaterialDetailText->SetText(FText::FromString(TEXT("Click 'Refresh Material Library' to view the 8 parent materials; click a row to select it.")));
 		return;
 	}
 
 	const FPonyMaterialRackEntry& Entry = MaterialRack[SelectedMaterialIndex];
-	FString Text = FString::Printf(TEXT("%s\n%s · 参数 %d/%d · MI %d"),
+	FString Text = FString::Printf(TEXT("%s\n%s · Parameter %d/%d · MI %d"),
 		*Entry.Path, *Entry.Usage, Entry.ParamCount, Entry.ExpectedCount, Entry.MICount);
 
 	if (Entry.Missing.Num() > 0)
 	{
-		Text += TEXT("\n缺参数：") + FString::Join(Entry.Missing, TEXT(", "));
+		Text += TEXT("\nMissing parameter:") + FString::Join(Entry.Missing, TEXT(", "));
 	}
 	else if (!Entry.bExists)
 	{
-		Text += TEXT("\n资产不存在：先运行 Scripts/make_masters.py。");
+		Text += TEXT("\nAsset does not exist: run Scripts/make_masters.py first.");
 	}
 	else
 	{
-		Text += TEXT("\n契约完整。");
+		Text += TEXT("\nContract complete.");
 	}
 
 	MaterialDetailText->SetText(FText::FromString(Text));
@@ -821,7 +821,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 		.Padding(FMargin(0.f, 0.f, 0.f, 4.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("M3 v1：选中地表 / 网格后撒一片。向下打射线找表面，支持坡度过滤、聚簇、随机尺寸/朝向、按尺寸落底。视口拖拽笔刷和 HISM 合批下一版。")))
+			.Text(FText::FromString(TEXT("M3 v1: Select ground/grid to scatter a patch. Cast downward ray to find surface, supports slope filtering, clustering, random size/rotation, size-based alignment to ground. Viewport brush and HISM batch will be implemented in next version.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.62f, 0.66f, 0.70f)))
 			.AutoWrapText(true)
 		]
@@ -838,7 +838,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 				SNew(SBox)
 				.WidthOverride(64.f)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("网格")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Grid")))
 				]
 			]
 			+ SHorizontalBox::Slot()
@@ -861,7 +861,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 				SNew(SBox)
 				.WidthOverride(64.f)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("数量")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Count")))
 				]
 			]
 			+ SHorizontalBox::Slot().AutoWidth()[ MakeNumberBox(TEXT("40"), ScatterCountBox) ]
@@ -870,7 +870,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 			.VAlign(VAlign_Center)
 			.Padding(FMargin(20.f, 0.f, 8.f, 0.f))
 			[
-				SNew(STextBlock).Text(FText::FromString(TEXT("半径")))
+				SNew(STextBlock).Text(FText::FromString(TEXT("Radius")))
 			]
 			+ SHorizontalBox::Slot().AutoWidth()[ MakeNumberBox(TEXT("500"), ScatterRadiusBox) ]
 		]
@@ -887,7 +887,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 				SNew(SBox)
 				.WidthOverride(64.f)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("缩放")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Scale")))
 				]
 			]
 			+ SHorizontalBox::Slot().AutoWidth()[ MakeNumberBox(TEXT("0.6"), ScatterMinScaleBox) ]
@@ -904,7 +904,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 			.VAlign(VAlign_Center)
 			.Padding(FMargin(20.f, 0.f, 8.f, 0.f))
 			[
-				SNew(STextBlock).Text(FText::FromString(TEXT("坡度°")))
+				SNew(STextBlock).Text(FText::FromString(TEXT("Slope°")))
 			]
 			+ SHorizontalBox::Slot().AutoWidth()[ MakeNumberBox(TEXT("35"), ScatterSlopeBox) ]
 		]
@@ -920,7 +920,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 				SAssignNew(ScatterHismBox, SCheckBox)
 				.IsChecked(ECheckBoxState::Unchecked)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("HISM 合批")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("HISM Batch")))
 				]
 			]
 			+ SHorizontalBox::Slot()
@@ -929,7 +929,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 			.Padding(FMargin(10.f, 0.f, 0.f, 0.f))
 			[
 				SNew(STextBlock)
-				.Text(FText::FromString(TEXT("实例多时勾选：整片只生成一个 Actor，用实例化组件合批。")))
+				.Text(FText::FromString(TEXT("Instance multiple: when checked, one Actor is created per area, using instanced components for batching.")))
 				.ColorAndOpacity(FSlateColor(FLinearColor(0.48f, 0.52f, 0.57f)))
 			]
 		]
@@ -947,7 +947,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 				.ContentPadding(FMargin(10.f, 7.f))
 				.OnClicked(this, &SPonyEditPanel::OnScatterSurface)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("在选中表面种一片")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Plant a patch on the selected surface")))
 				]
 			]
 			+ SHorizontalBox::Slot()
@@ -959,7 +959,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 				.ContentPadding(FMargin(10.f, 7.f))
 				.OnClicked(this, &SPonyEditPanel::OnClearScatter)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("清空种植")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Clear planting")))
 				]
 			]
 		]
@@ -968,7 +968,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeScatterPage()
 		.Padding(FMargin(0.f, 6.f, 0.f, 0.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("默认 4 簇、簇半径 120，落底按网格包围盒 minZ 自动抬高。清空只删带 PonyScatter 标签的 Actor。")))
+			.Text(FText::FromString(TEXT("Default: 4 clusters, cluster radius 120. Align to ground based on the mesh bounding box minZ. Clear only removes Actors with the PonyScatter tag.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.48f, 0.52f, 0.57f)))
 			.AutoWrapText(true)
 		];
@@ -1024,7 +1024,7 @@ FReply SPonyEditPanel::OnScatterSurface()
 		if (bOk)
 		{
 			StatusText->SetText(FText::FromString(FString::Printf(
-				TEXT("种植：放置 %d / %d，坡度跳过 %d，未命中 %d"),
+				TEXT("Planting: placed %d / %d, slope skipped %d, missed %d"),
 				GetJsonInt(Root, TEXT("placed")),
 				GetJsonInt(Root, TEXT("requested")),
 				GetJsonInt(Root, TEXT("skippedSlope")),
@@ -1034,8 +1034,8 @@ FReply SPonyEditPanel::OnScatterSurface()
 		{
 			const FString Error = bParsed
 				? GetJsonString(Root, TEXT("error"))
-				: TEXT("返回结果不是合法 JSON");
-			StatusText->SetText(FText::FromString(TEXT("种植失败：") + Error));
+				: TEXT("Return result is not valid JSON");
+			StatusText->SetText(FText::FromString(TEXT("Planting failed:") + Error));
 		}
 	}
 	return FReply::Handled();
@@ -1053,8 +1053,8 @@ FReply SPonyEditPanel::OnClearScatter()
 	if (StatusText.IsValid())
 	{
 		StatusText->SetText(FText::FromString(bOk
-			? FString::Printf(TEXT("已清空 %d 个种植实例"), GetJsonInt(Root, TEXT("removed")))
-			: TEXT("清空种植失败")));
+			? FString::Printf(TEXT("Cleared %d planting instances"), GetJsonInt(Root, TEXT("removed")))
+			: TEXT("Failed to clear planting")));
 	}
 	return FReply::Handled();
 }
@@ -1067,7 +1067,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeNamingPage()
 		.Padding(FMargin(0.f, 2.f, 0.f, 8.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("扫描 /Game：检查前缀、空格/中文、PascalCase、序号补零、_final/_copy 残留，改名保留引用。")))
+			.Text(FText::FromString(TEXT("Scan /Game: check prefix, spaces/Chinese characters, PascalCase, sequence zero-padding, _final/_copy remnants; rename while preserving references.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.62f, 0.66f, 0.70f)))
 			.AutoWrapText(true)
 		]
@@ -1084,7 +1084,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeNamingPage()
 				.ContentPadding(FMargin(10.f, 6.f))
 				.OnClicked(this, &SPonyEditPanel::OnScanNaming)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("扫描 /Game")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Scan /Game")))
 				]
 			]
 			+ SHorizontalBox::Slot()
@@ -1096,7 +1096,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeNamingPage()
 				.ContentPadding(FMargin(10.f, 6.f))
 				.OnClicked(this, &SPonyEditPanel::OnFixNaming)
 				[
-					SNew(STextBlock).Text(FText::FromString(TEXT("修复全部")))
+					SNew(STextBlock).Text(FText::FromString(TEXT("Fix all")))
 				]
 			]
 		]
@@ -1109,7 +1109,7 @@ TSharedRef<SWidget> SPonyEditPanel::MakeNamingPage()
 			.ContentPadding(FMargin(10.f, 6.f))
 			.OnClicked(this, &SPonyEditPanel::OnFixActorLabels)
 			[
-				SNew(STextBlock).Text(FText::FromString(TEXT("修选中 Actor 标签（ENV_…）")))
+				SNew(STextBlock).Text(FText::FromString(TEXT("Fix selected Actor tags (ENV_...)")))
 			]
 		]
 		+ SVerticalBox::Slot()
@@ -1135,7 +1135,7 @@ FReply SPonyEditPanel::OnScanNaming()
 	if (StatusText.IsValid())
 	{
 		StatusText->SetText(FText::FromString(FString::Printf(
-			TEXT("扫描 %d 个资产，%d 个命名问题"), Scanned, NamingIssues.Num())));
+			TEXT("Scanned %d assets, %d naming issues"), Scanned, NamingIssues.Num())));
 	}
 	return FReply::Handled();
 }
@@ -1159,7 +1159,7 @@ FReply SPonyEditPanel::OnFixNaming()
 	if (StatusText.IsValid())
 	{
 		StatusText->SetText(FText::FromString(FString::Printf(
-			TEXT("改名 %d 个，失败 %d 个，剩余 %d 个问题"), RenamedCount, Failed.Num(), NamingIssues.Num())));
+			TEXT("Renamed %d, failed %d, %d issues remaining"), RenamedCount, Failed.Num(), NamingIssues.Num())));
 	}
 	return FReply::Handled();
 }
@@ -1172,7 +1172,7 @@ FReply SPonyEditPanel::OnFixActorLabels()
 	if (StatusText.IsValid())
 	{
 		StatusText->SetText(FText::FromString(FString::Printf(
-			TEXT("Actor 标签：改了 %d 个（选中的 Actor 才会处理）"), Changed)));
+			TEXT("Actor tags: fixed %d (only applies to selected Actors)"), Changed)));
 	}
 	return FReply::Handled();
 }
@@ -1192,7 +1192,7 @@ void SPonyEditPanel::RebuildNamingList(){
 		.Padding(FMargin(0.f, 4.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(TEXT("没有发现问题。")))
+			.Text(FText::FromString(TEXT("No issues found.")))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.45f, 0.68f, 0.52f)))
 		];
 		return;
@@ -1235,7 +1235,7 @@ void SPonyEditPanel::RebuildNamingList(){
 		.Padding(FMargin(0.f, 6.f))
 		[
 			SNew(STextBlock)
-			.Text(FText::FromString(FString::Printf(TEXT("还有 %d 条…"), NamingIssues.Num() - MaxRows)))
+			.Text(FText::FromString(FString::Printf(TEXT("%d more items…"), NamingIssues.Num() - MaxRows)))
 			.ColorAndOpacity(FSlateColor(FLinearColor(0.45f, 0.49f, 0.53f)))
 		];
 	}
@@ -1257,19 +1257,19 @@ FReply SPonyEditPanel::OnModuleSelected(int32 ModuleIndex)
 	{
 		if (CurrentModule == 2)
 		{
-			StatusText->SetText(FText::FromString(TEXT("材质架：先选母材质，再建 MI 或直接套到选中 Actor。")));
+			StatusText->SetText(FText::FromString(TEXT("Materials: select a parent material, then create an instance or apply it to selected Actors.")));
 		}
 		else if (CurrentModule == 3)
 		{
-			StatusText->SetText(FText::FromString(TEXT("就绪。选中 Actor 后可以归底。")));
+			StatusText->SetText(FText::FromString(TEXT("Ready. After selecting an actor, it can be aligned to ground.")));
 		}
 		else if (CurrentModule == 4)
 		{
-			StatusText->SetText(FText::FromString(TEXT("种植 v1：选中地表 / 网格后点「种一片」；清空只删 PonyScatter。")));
+			StatusText->SetText(FText::FromString(TEXT("Scatter v1: select a surface or mesh, then click Scatter. Clear removes only PonyScatter objects.")));
 		}
 		else
 		{
-			StatusText->SetText(FText::FromString(TEXT("该模块排在 M1–M4，面板位置已留好。")));
+			StatusText->SetText(FText::FromString(TEXT("This module is planned for milestones M1–M4. Its panel is reserved.")));
 		}
 	}
 

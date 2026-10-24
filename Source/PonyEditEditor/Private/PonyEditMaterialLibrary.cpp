@@ -151,7 +151,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_Opaque");
-			Spec.Usage = TEXT("通用不透明");
+			Spec.Usage = TEXT("General Opaque");
 			Spec.Params = MakeCoreParams();
 			Specs.Add(Spec);
 		}
@@ -159,7 +159,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_Masked");
-			Spec.Usage = TEXT("树叶 / 铁丝网");
+			Spec.Usage = TEXT("Leaves / Wire mesh");
 			Spec.Params = MakeCoreParams();
 			Spec.Params.Add(MakeScalarParam(TEXT("OpacityMask"), 1.f));
 			Specs.Add(Spec);
@@ -168,7 +168,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_Foliage");
-			Spec.Usage = TEXT("植被");
+			Spec.Usage = TEXT("Vegetation");
 			Spec.Params = MakeCoreParams();
 			Spec.Params.Add(MakeScalarParam(TEXT("OpacityMask"), 1.f));
 			Spec.Params.Add(MakeScalarParam(TEXT("WindIntensity"), 0.3f));
@@ -181,7 +181,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_Transparent");
-			Spec.Usage = TEXT("玻璃 / 水面片");
+			Spec.Usage = TEXT("Glass / Water surface");
 			Spec.Params = MakeCoreParams();
 			Spec.Params.Add(MakeScalarParam(TEXT("Opacity"), 0.5f));
 			Spec.Params.Add(MakeScalarParam(TEXT("FresnelPower"), 3.f));
@@ -191,7 +191,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_Decal");
-			Spec.Usage = TEXT("贴花");
+			Spec.Usage = TEXT("Decals");
 			Spec.Params = MakeCoreParams();
 			Spec.Params.Add(MakeScalarParam(TEXT("Opacity"), 1.f));
 			Specs.Add(Spec);
@@ -200,7 +200,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_Emissive");
-			Spec.Usage = TEXT("灯带 / 屏幕");
+			Spec.Usage = TEXT("LED strips / Screens");
 			Spec.Params.Add(MakeTextureParam(TEXT("BaseColor")));
 			Spec.Params.Add(MakeVectorParam(TEXT("BaseColorTint"), FLinearColor(1.f, 1.f, 1.f, 1.f)));
 			Spec.Params.Add(MakeScalarParam(TEXT("EmissiveIntensity"), 1.f));
@@ -211,7 +211,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_TerrainBlend");
-			Spec.Usage = TEXT("地形 3–4 层");
+			Spec.Usage = TEXT("Terrain 3–4 layers");
 			for (int32 Layer = 0; Layer < 4; ++Layer)
 			{
 				Spec.Params.Add(MakeTextureParam(*FString::Printf(TEXT("Layer%dColor"), Layer)));
@@ -226,7 +226,7 @@ namespace
 		{
 			FPonyMasterSpec Spec;
 			Spec.Name = TEXT("PE_MM_Std_VertexBlend");
-			Spec.Usage = TEXT("模块化墙体 / 道具");
+			Spec.Usage = TEXT("Modular Wall / Prop");
 			Spec.Params = MakeCoreParams();
 			Spec.Params.Add(MakeVectorParam(TEXT("SecondaryColor"), FLinearColor(0.35f, 0.30f, 0.25f, 1.f)));
 			Specs.Add(Spec);
@@ -435,8 +435,8 @@ namespace
 			FString ParentPath;
 			if (Asset.GetTagValue(FName(TEXT("Parent")), ParentPath) && !ParentPath.IsEmpty())
 			{
-				// 5.6 的 Parent tag 是导出文本：/Script/Engine.Material'/Game/.../M_Name.M_Name'
-				// 取单引号里的对象路径，再取短名。
+				// 5.6 of Parent tag Exported text: /Script/Engine.Material'/Game/.../M_Name.M_Name'
+				// Extract object path from single quotes, then get short name.
 				FString CleanParent = ParentPath;
 				int32 QuoteStart = INDEX_NONE;
 				if (CleanParent.FindChar(TEXT('\''), QuoteStart))
@@ -492,7 +492,7 @@ namespace
 			++InOutApplied;
 			break;
 		case EPonyParamType::Texture:
-			// 纹理不写覆盖，继承母材质里的默认贴图；MI 只覆盖标量/向量/开关。
+			// Texture not overwritten, inherits default texture from parent material; MI Override only scalar values/Vector/Switch.
 			break;
 		default:
 			break;
@@ -511,7 +511,7 @@ namespace
 		}
 		if (!FPackageName::IsValidLongPackageName(FinalPackagePath))
 		{
-			OutResult.Error = FString::Printf(TEXT("非法包路径：%s"), *FinalPackagePath);
+			OutResult.Error = FString::Printf(TEXT("Invalid package path: %s"), *FinalPackagePath);
 			return false;
 		}
 
@@ -519,14 +519,14 @@ namespace
 		const FPonyMasterSpec* Spec = FindSpec(FName(*MasterName));
 		if (!Spec)
 		{
-			OutResult.Error = FString::Printf(TEXT("母材质不在契约表：%s"), *MasterName);
+			OutResult.Error = FString::Printf(TEXT("Parent material not in contract table: %s"), *MasterName);
 			return false;
 		}
 
 		UMaterial* Master = Cast<UMaterial>(LoadAssetObject(GetMasterAssetPath(Spec->Name)));
 		if (!Master)
 		{
-			OutResult.Error = FString::Printf(TEXT("母材质不存在：%s"), *GetMasterAssetPath(Spec->Name));
+			OutResult.Error = FString::Printf(TEXT("Parent material does not exist: %s"), *GetMasterAssetPath(Spec->Name));
 			return false;
 		}
 
@@ -541,14 +541,14 @@ namespace
 		}
 		if (OutResult.Missing.Num() > 0)
 		{
-			OutResult.Error = TEXT("母材质契约不完整，拒绝创建 MI");
+			OutResult.Error = TEXT("Parent material contract is incomplete, refusing to create MI");
 			return false;
 		}
 
 		const FString FinalName = NormalizeInstanceName(AssetName);
 		if (FinalName.IsEmpty() || FinalName == TEXT("MI_"))
 		{
-			OutResult.Error = TEXT("MI 名字为空");
+			OutResult.Error = TEXT("MI name is empty");
 			return false;
 		}
 
@@ -557,7 +557,7 @@ namespace
 		UMaterialInstanceConstant* Instance = Cast<UMaterialInstanceConstant>(ExistingObject);
 		if (ExistingObject && !Instance)
 		{
-			OutResult.Error = FString::Printf(TEXT("同名资产已存在且不是 MI：%s"), *FullPath);
+			OutResult.Error = FString::Printf(TEXT("An asset with the same name already exists and is not an MI: %s"), *FullPath);
 			return false;
 		}
 
@@ -574,7 +574,7 @@ namespace
 				FinalName, FinalPackagePath, UMaterialInstanceConstant::StaticClass(), Factory));
 			if (!Instance)
 			{
-				OutResult.Error = FString::Printf(TEXT("创建 MI 失败：%s"), *FullPath);
+				OutResult.Error = FString::Printf(TEXT("Failed to create MI: %s"), *FullPath);
 				return false;
 			}
 		}
@@ -597,7 +597,7 @@ namespace
 		OutResult.bOk = OutResult.bSaved;
 		if (!OutResult.bSaved)
 		{
-			OutResult.Error = TEXT("MI 已在内存创建，但保存到磁盘失败");
+			OutResult.Error = TEXT("MI already created in memory, but failed to save to disk");
 		}
 		OutResult.AssetName = FinalName;
 		OutResult.AssetPath = FullPath;
@@ -696,7 +696,7 @@ namespace
 			return Result;
 		}
 
-		const FScopedTransaction Transaction(FText::FromString(TEXT("小马编辑：应用材质")));
+		const FScopedTransaction Transaction(FText::FromString(TEXT("Xiaoma Editor: Apply Material")));
 
 		for (FSelectionIterator It(*Selection); It; ++It)
 		{
@@ -800,7 +800,7 @@ FString UPonyEditMaterialLibrary::ValidateMaster(const FString& MasterPath)
 		Root->SetBoolField(TEXT("ok"), Material != nullptr);
 		Root->SetBoolField(TEXT("knownContract"), false);
 		Root->SetStringField(TEXT("path"), MasterPath);
-		Root->SetStringField(TEXT("error"), Material ? TEXT("母材质不在契约表") : TEXT("母材质不存在"));
+		Root->SetStringField(TEXT("error"), Material ? TEXT("Parent material not in contract table") : TEXT("Parent material does not exist"));
 		if (Material)
 		{
 			TMap<FName, EPonyParamType> Found;
@@ -829,7 +829,7 @@ FString UPonyEditMaterialLibrary::CreateInstanceForSelected(const FString& Maste
 	FString MeshName;
 	if (!FindSelectedMeshName(MeshName))
 	{
-		return ErrorJson(TEXT("没有选中的 Actor，或选中的 Actor 没有 StaticMesh"));
+		return ErrorJson(TEXT("No selected Actor, or selected Actor has no StaticMesh"));
 	}
 
 	if (MeshName.StartsWith(TEXT("SM_")))
@@ -861,7 +861,7 @@ FString UPonyEditMaterialLibrary::CreateInstanceForSelected(const FString& Maste
 	Root->SetBoolField(TEXT("ok"), ApplyResult.SlotCount > 0);
 	if (ApplyResult.SlotCount == 0)
 	{
-		Root->SetStringField(TEXT("error"), TEXT("MI 已创建，但没有可应用的网格槽位"));
+		Root->SetStringField(TEXT("error"), TEXT("MI already created, but no render mesh slot available"));
 	}
 	return WriteJson(Root);
 }
@@ -871,7 +871,7 @@ FString UPonyEditMaterialLibrary::ApplyToSelected(const FString& MaterialPath, i
 	UMaterialInterface* Material = Cast<UMaterialInterface>(LoadAssetObject(MaterialPath));
 	if (!Material)
 	{
-		return ErrorJson(FString::Printf(TEXT("材质不存在：%s"), *MaterialPath));
+		return ErrorJson(FString::Printf(TEXT("Material does not exist: %s"), *MaterialPath));
 	}
 
 	const FPonyApplyResult Result = ApplyMaterialToSelection(Material, SlotIndex);
@@ -885,7 +885,7 @@ FString UPonyEditMaterialLibrary::ApplyToSelected(const FString& MaterialPath, i
 	Root->SetNumberField(TEXT("slots"), Result.SlotCount);
 	if (Result.SlotCount == 0)
 	{
-		Root->SetStringField(TEXT("error"), TEXT("没有选中的可渲染网格，或槽位不存在"));
+		Root->SetStringField(TEXT("error"), TEXT("No selected renderable mesh, or slot does not exist"));
 	}
 	return WriteJson(Root);
 }
@@ -904,7 +904,7 @@ FString UPonyEditMaterialLibrary::GetInstanceInfo(const FString& MaterialPath)
 			Root->SetStringField(TEXT("path"), Master->GetPathName());
 			return WriteJson(Root);
 		}
-		return ErrorJson(FString::Printf(TEXT("MI 不存在：%s"), *MaterialPath));
+		return ErrorJson(FString::Printf(TEXT("MI does not exist: %s"), *MaterialPath));
 	}
 
 	UMaterialInterface* Parent = Instance->Parent.Get();

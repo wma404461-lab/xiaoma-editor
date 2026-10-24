@@ -1,11 +1,11 @@
-# 小马编辑 · PonyEdit
+# Xiaoma Editor - PonyEdit
 
-UE 场景制作编辑器插件。包含导入、命名、材质、Pivot、散布及编辑面板相关 C++ 源码；来自已有 PonyEdit 工程，插件描述版本 0.1.0。以实际源码实现为准，界面入口不代表每项完整流程均已验收。
+A C++ scene-production toolkit for Unreal Engine 5.6. The source includes import, naming, materials, pivot placement, surface scattering and editor panels. The plugin descriptor reports version 0.1.0. Available commands should not be mistaken for end-to-end acceptance of every workflow.
 
-## 使用源码
+## Build and use
 
-将本仓库放入自己的 C++ UE 项目 `Plugins/PonyEdit`，重新生成项目文件，用 Visual Studio 构建 Editor 目标，再在插件列表启用。现有工程面向 UE 5.6；其他版本需自行核验 API 兼容性。本次只整理源文件和模块依赖，没有启动编辑器或重新做完整引擎编译。
+Place the repository in `Plugins/PonyEdit` inside your own C++ Unreal project. Regenerate project files, build the Editor target with Visual Studio, then enable PonyEdit. Other engine versions require API compatibility checks.
 
-`Source/PonyEditEditor` 为编辑器模块，`Source/PonyEditRuntime` 为设置和运行时模块。需要安装合法取得的 Unreal Engine 与 C++ 工具链；不包含引擎源码、引擎二进制、工程素材和缓存。
+`Source/PonyEditEditor` contains the editor module. `Source/PonyEditRuntime` contains runtime settings. Both modules passed a clean Win64 Editor plugin build with Unreal Engine 5.6.0. Use an ASCII-only build path: the installed compiler failed on a non-ASCII intermediate path. The compiler also reported a non-preferred toolchain warning. Interactive editor workflows were not retested for this language-only source release.
 
-自制插件源码按 MIT 发布；Unreal Engine 仍受其自身许可约束。
+Use a legitimately obtained Unreal Engine installation and C++ toolchain. Engine source, binaries, project assets and caches are not included. Project-authored plugin source is MIT licensed; Unreal Engine remains subject to its own license.
