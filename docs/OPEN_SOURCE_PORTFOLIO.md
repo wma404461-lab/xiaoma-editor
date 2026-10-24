@@ -14,7 +14,6 @@ This portfolio covers all seven public Xiaoma repositories verified on **October
 | [Xiaoma Translator / FlowSub](https://github.com/wma404461-lab/xiaoma-translator) | Live English-audio transcription and Chinese subtitles, with an English application interface | 114 automated tests passed; Python desktop overlay syntax check passed |
 | [Xiaoma Archive](https://github.com/wma404461-lab/xiaoma-archive) | Native Windows archive management and background context-menu operations | x64 build and 49 archive self-tests passed |
 | [Xiaoma Brightness](https://github.com/wma404461-lab/xiaoma-brightness) | Native Windows tray control for multiple displays, with hardware control and software dimming fallback | x86 build and 80,000 generated tray-logic checks passed |
-
 | [Xiaoma Scene Workbench](https://github.com/wma404461-lab/xiaoma-scene-workbench) | Scene-reference board, isolated bring-your-own-key generation workspaces, local 3D previews, panorama preview and Unreal export helpers | Clean 81-file source install and 38 tests passed; actual browser model/sphere workflows checked |
 
 The counts describe local checks of the published source snapshots. They are not user counts, adoption figures, independent certification or proof of every supported workflow. The repositories are newly public; monthly downloads are not measured and no adoption figures are claimed here. This publication batch contains source, not downloadable binary releases.
