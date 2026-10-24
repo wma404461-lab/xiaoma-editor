@@ -1,0 +1,247 @@
+#include "PonyMeshOps.h"
+
+#include "Editor.h"
+#include "Editor/EditorEngine.h"
+#include "Selection.h"
+#include "ScopedTransaction.h"
+
+#include "Components/StaticMeshComponent.h"
+#include "Engine/StaticMesh.h"
+#include "MeshDescription.h"
+#include "PhysicsEngine/AggregateGeom.h"
+#include "PhysicsEngine/BodySetup.h"
+
+namespace
+{
+	void GatherSelectedActors(TArray<AActor*>& OutActors)
+	{
+		if (!GEditor)
+		{
+			return;
+		}
+
+		if (USelection* Selection = GEditor->GetSelectedActors())
+		{
+			for (FSelectionIterator It(*Selection); It; ++It)
+			{
+				if (AActor* Actor = Cast<AActor>(*It))
+				{
+					OutActors.Add(Actor);
+				}
+			}
+		}
+	}
+
+	void GatherSelectedStaticMeshes(TSet<UStaticMesh*>& OutMeshes)
+	{
+		TArray<AActor*> Actors;
+		GatherSelectedActors(Actors);
+
+		for (AActor* Actor : Actors)
+		{
+			if (!IsValid(Actor))
+			{
+				continue;
+			}
+
+			TArray<UStaticMeshComponent*> Components;
+			Actor->GetComponents<UStaticMeshComponent>(Components);
+			for (UStaticMeshComponent* Component : Components)
+			{
+				if (Component && Component->GetStaticMesh())
+				{
+					OutMeshes.Add(Component->GetStaticMesh());
+				}
+			}
+		}
+	}
+}
+
+int32 FPonyMeshOps::SnapSelectedActorsToGround(FString& OutMessage)
+{
+	TArray<AActor*> Actors;
+	GatherSelectedActors(Actors);
+
+	if (Actors.Num() == 0)
+	{
+		OutMessage = TEXT("先选中 Actor，再点归底");
+		return 0;
+	}
+
+	const FScopedTransaction Transaction(NSLOCTEXT("PonyEdit", "SnapToGround", "小马编辑：实例归底"));
+	int32 MovedCount = 0;
+
+	for (AActor* Actor : Actors)
+	{
+		if (!IsValid(Actor))
+		{
+			continue;
+		}
+
+		FBox WorldBounds(ForceInit);
+		TArray<UStaticMeshComponent*> Components;
+		Actor->GetComponents<UStaticMeshComponent>(Components);
+		for (UStaticMeshComponent* Component : Components)
+		{
+			if (Component && Component->IsRegistered())
+			{
+				WorldBounds += Component->Bounds.GetBox();
+			}
+		}
+
+		if (!WorldBounds.IsValid)
+		{
+			continue;
+		}
+
+		const double DeltaZ = -WorldBounds.Min.Z;
+		if (FMath::Abs(DeltaZ) < 0.01)
+		{
+			continue;
+		}
+
+		Actor->Modify();
+		Actor->AddActorWorldOffset(FVector(0.0, 0.0, DeltaZ), false);
+		Actor->MarkPackageDirty();
+		++MovedCount;
+	}
+
+	OutMessage = FString::Printf(TEXT("实例归底：%d / %d 个 Actor 已落到 Z=0"), MovedCount, Actors.Num());
+	return MovedCount;
+}
+
+int32 FPonyMeshOps::PivotMeshesToBottom(FString& OutMessage)
+{
+	TSet<UStaticMesh*> Meshes;
+	GatherSelectedStaticMeshes(Meshes);
+
+	if (Meshes.Num() == 0)
+	{
+		OutMessage = TEXT("选中的 Actor 上没有 StaticMesh");
+		return 0;
+	}
+
+	const FScopedTransaction Transaction(NSLOCTEXT("PonyEdit", "PivotToBottom", "小马编辑：枢轴归底"));
+	int32 ChangedCount = 0;
+	int32 SkippedCount = 0;
+
+	for (UStaticMesh* Mesh : Meshes)
+	{
+		if (!Mesh || !Mesh->IsMeshDescriptionValid(0))
+		{
+			++SkippedCount;
+			continue;
+		}
+
+		Mesh->Modify();
+
+		// 先算所有有效 LOD 的合并包围盒。
+		FBox Bounds(ForceInit);
+		const int32 NumLODs = Mesh->GetNumLODs();
+		for (int32 LODIndex = 0; LODIndex < NumLODs; ++LODIndex)
+		{
+			if (!Mesh->IsMeshDescriptionValid(LODIndex))
+			{
+				continue;
+			}
+
+			if (const FMeshDescription* Description = Mesh->GetMeshDescription(LODIndex))
+			{
+				const auto Positions = Description->GetVertexPositions();
+				for (const FVertexID VertexID : Description->Vertices().GetElementIDs())
+				{
+					Bounds += FVector(Positions.Get(VertexID));
+				}
+			}
+		}
+
+		if (!Bounds.IsValid)
+		{
+			++SkippedCount;
+			continue;
+		}
+
+		const FVector Offset(
+			-(Bounds.Min.X + Bounds.Max.X) * 0.5,
+			-(Bounds.Min.Y + Bounds.Max.Y) * 0.5,
+			-Bounds.Min.Z);
+
+		if (Offset.IsNearlyZero())
+		{
+			++SkippedCount;
+			continue;
+		}
+
+		for (int32 LODIndex = 0; LODIndex < NumLODs; ++LODIndex)
+		{
+			if (!Mesh->IsMeshDescriptionValid(LODIndex))
+			{
+				continue;
+			}
+
+			FMeshDescription* Description = Mesh->GetMeshDescription(LODIndex);
+			if (!Description)
+			{
+				continue;
+			}
+
+			const auto Positions = Description->GetVertexPositions();
+			for (const FVertexID VertexID : Description->Vertices().GetElementIDs())
+			{
+				Positions.Set(VertexID, Positions.Get(VertexID) + FVector3f(Offset));
+			}
+
+			Mesh->CommitMeshDescription(LODIndex);
+		}
+
+		// 简单碰撞跟着平移；凸包一并移，再重建物理。
+		if (UBodySetup* BodySetup = Mesh->GetBodySetup())
+		{
+			for (FKBoxElem& Element : BodySetup->AggGeom.BoxElems)
+			{
+				Element.Center += Offset;
+			}
+			for (FKSphereElem& Element : BodySetup->AggGeom.SphereElems)
+			{
+				Element.Center += Offset;
+			}
+			for (FKSphylElem& Element : BodySetup->AggGeom.SphylElems)
+			{
+				Element.Center += Offset;
+			}
+			for (FKTaperedCapsuleElem& Element : BodySetup->AggGeom.TaperedCapsuleElems)
+			{
+				Element.Center += Offset;
+			}
+			for (FKConvexElem& Element : BodySetup->AggGeom.ConvexElems)
+			{
+				Element.SetTransform(FTransform(Offset) * Element.GetTransform());
+			}
+
+			BodySetup->InvalidatePhysicsData();
+			BodySetup->CreatePhysicsMeshes();
+		}
+
+		Mesh->PostEditChange();
+		Mesh->MarkPackageDirty();
+		++ChangedCount;
+
+		// 自检用：读源网格的 minZ，确认顶点真的动了（渲染包围盒可能延迟刷新）。
+		float SourceMinZ = TNumericLimits<float>::Max();
+		if (const FMeshDescription* CheckDesc = Mesh->GetMeshDescription(0))
+		{
+			const auto Positions = CheckDesc->GetVertexPositions();
+			for (const FVertexID VertexID : CheckDesc->Vertices().GetElementIDs())
+			{
+				SourceMinZ = FMath::Min(SourceMinZ, Positions.Get(VertexID).Z);
+			}
+		}
+
+		UE_LOG(LogTemp, Display, TEXT("[PonyEdit] Pivot %s: offset=(%.1f, %.1f, %.1f), boundsBefore=%s, boundsAfter=%s, sourceMinZ=%.2f"),
+			*Mesh->GetName(), Offset.X, Offset.Y, Offset.Z,
+			*Bounds.ToString(), *Mesh->GetBoundingBox().ToString(), SourceMinZ);
+	}
+
+	OutMessage = FString::Printf(TEXT("资产枢轴归底：%d 个网格已处理，%d 个跳过（无可用网格描述）"), ChangedCount, SkippedCount);
+	return ChangedCount;
+}

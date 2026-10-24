@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "小马编辑",
+	"Description": "PonyEdit: level design toolkit for UE 5.6+ (import, naming, materials, pivot, scatter, terrain, road).",
+	"Category": "Editor",
+	"CreatedBy": "",
+	"CanContainContent": true,
+	"EnabledByDefault": true,
+	"Modules": [
+		{
+			"Name": "PonyEditRuntime",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "PonyEditEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		}
+	]
+}
