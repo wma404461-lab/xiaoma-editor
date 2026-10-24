@@ -400,7 +400,7 @@ void FPonyEditEditorModule::RegisterMenus()
 			FUIAction(FExecuteAction::CreateRaw(this, &FPonyEditEditorModule::OpenPanel)));
 	}
 
-	// Is the primary target; the other is fallback, will not display if name does not exist: PlayToolBar Xiaoma.
+	// Add the toolbar button to PlayToolBar, with the main toolbar as a fallback.
 	const FName ToolbarMenus[] =
 	{
 		FName("LevelEditor.LevelEditorToolBar.PlayToolBar"),
