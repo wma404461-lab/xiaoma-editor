@@ -4,7 +4,7 @@ A C++ scene-production toolkit for Unreal Engine 5.6. The source includes import
 
 ## Xiaoma project portfolio
 
-PonyEdit is one of seven public tools maintained by Artist Ma. See the [Xiaoma Open Source Portfolio](docs/OPEN_SOURCE_PORTFOLIO.md) for the complete project list, features, recorded build/test results, validation limits and source links. It covers PonyEdit, Asset Library, Player + Recorder, Translator, Archive, Brightness and Scene Workbench.
+PonyEdit is one of six public tools maintained by Artist Ma. See the [Xiaoma Open Source Portfolio](docs/OPEN_SOURCE_PORTFOLIO.md) for the complete project list, features, recorded build/test results, validation limits and source links. It covers PonyEdit, Asset Library, Player + Recorder, Translator, Archive and Brightness.
 
 ## Build and use
 
