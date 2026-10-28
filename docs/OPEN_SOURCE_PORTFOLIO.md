@@ -2,7 +2,7 @@
 
 Maintainer: **Artist Ma** (professional name, also known as `artist m`) · [GitHub profile](https://github.com/wma404461-lab)
 
-This portfolio covers six public Xiaoma repositories in the current portfolio verified on **October 24, 2026**. PonyEdit is the Unreal Engine component of a broader set of tools for scene artists and Windows creative workflows. Each project below has its own source repository, build instructions and license information.
+This portfolio covers seven public Xiaoma repositories in the current portfolio, updated on **October 28, 2026**. PonyEdit is the Unreal Engine component of a broader set of tools for scene artists and Windows creative workflows. Each project below has its own source repository, build instructions and license information.
 
 ## Projects at a glance
 
@@ -14,6 +14,8 @@ This portfolio covers six public Xiaoma repositories in the current portfolio ve
 | [Xiaoma Translator / FlowSub](https://github.com/wma404461-lab/xiaoma-translator) | Live English-audio transcription and Chinese subtitles, with an English application interface | 114 automated tests passed; Python desktop overlay syntax check passed |
 | [Xiaoma Archive](https://github.com/wma404461-lab/xiaoma-archive) | Native Windows archive management and background context-menu operations | x64 build and 49 archive self-tests passed |
 | [Xiaoma Brightness](https://github.com/wma404461-lab/xiaoma-brightness) | Native Windows tray control for multiple displays, with hardware control and software dimming fallback | x86 build and 80,000 generated tray-logic checks passed |
+
+| [Xiaoma Piano](https://github.com/wma404461-lab/xiaoma-piano) | Desktop web piano practice, local score import and generated practice tones | Clean locked build; desktop browser practice/import/persistence/offline checks passed |
 
 The counts describe local checks of the published source snapshots. They are not user counts, adoption figures, independent certification or proof of every supported workflow. The repositories are newly public; monthly downloads are not measured and no adoption figures are claimed here. This publication batch contains source, not downloadable binary releases.
 
@@ -76,6 +78,16 @@ The counts describe local checks of the published source snapshots. They are not
 **Validation boundary:** Native UI was not launched for this publication check. Monitor/driver support varies; ARM emulation and every physical display configuration have not been verified.
 
 **Inspect:** [Validated source snapshot](https://github.com/wma404461-lab/xiaoma-brightness/tree/5a52b9d83457b411a67faf1169f2b422cf8a4b1b) · [Build guide](https://github.com/wma404461-lab/xiaoma-brightness/blob/5a52b9d83457b411a67faf1169f2b422cf8a4b1b/README.md) · [Tray test runner](https://github.com/wma404461-lab/xiaoma-brightness/blob/5a52b9d83457b411a67faf1169f2b422cf8a4b1b/scripts/test-tray-toggle.ps1)
+
+## 7. Xiaoma Piano
+
+**Purpose:** Practise from staff notation with local MusicXML, MXL or MIDI import, generated tones and on-screen keys. This is a historical 0.3.26 desktop web source edition, with one original exercise. Commercial catalogs, scanned scores, recorded sample banks and native installers are excluded.
+
+**Delivered work:** Isolated the English source, generated original additive-synthesis tones, corrected terminal playback progress and offline shell caching, added MXL archive limits, and preserved package and embedded-font license notices. A clean locked installation and build passed. Actual desktop browser checks covered practice, score import, refresh persistence and reload with the preview origin unavailable.
+
+**Validation boundary:** Mobile layout, microphone input, hardware MIDI, acoustic fidelity and native packaging remain unverified. This source snapshot does not establish parity with later installed or deployed versions. No installer or compiled release is supplied.
+
+**Inspect:** [Validated source snapshot](https://github.com/wma404461-lab/xiaoma-piano/tree/ff5403b347cbede8be6252f04e27200eff43de30) · [Build and verification guide](https://github.com/wma404461-lab/xiaoma-piano/blob/ff5403b347cbede8be6252f04e27200eff43de30/README.md) · [Third-party notices](https://github.com/wma404461-lab/xiaoma-piano/blob/ff5403b347cbede8be6252f04e27200eff43de30/THIRD_PARTY_NOTICES.md)
 
 ## Maintenance and intended Codex use
 
